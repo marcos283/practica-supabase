@@ -1,0 +1,17 @@
+{
+  "name": "galeria-fotos-supabase",
+  "version": "1.0.0",
+  "description": "Galería de fotos con Supabase y Netlify",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "echo 'Abre index.html en tu navegador local'"
+  },
+  "keywords": [
+    "gallery",
+    "supabase",
+    "netlify",
+    "photos"
+  ],
+  "author": "",
+  "license": "MIT"
+}

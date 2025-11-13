@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Foto - Galería</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>📤 Subir Foto</h1>
+            <a href="index.html" class="btn btn-secondary">Volver a Galería</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="upload-section">
+            <form id="uploadForm" class="upload-form">
+                <!-- Título -->
+                <div class="form-group">
+                    <label for="title">Título *</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        required
+                        placeholder="Ej: Atardecer en la playa"
+                        maxlength="100"
+                    >
+                </div>
+
+                <!-- Descripción -->
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Describe tu foto (opcional)"
+                        maxlength="500"
+                    ></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group">
+                    <label for="tags">Tags (separados por comas)</label>
+                    <input
+                        type="text"
+                        id="tags"
+                        name="tags"
+                        placeholder="Ej: naturaleza, paisaje, playa"
+                    >
+                    <small>Separa los tags con comas. Ejemplo: naturaleza, paisaje, atardecer</small>
+                </div>
+
+                <!-- Imagen -->
+                <div class="form-group">
+                    <label for="image">Imagen *</label>
+                    <div class="file-input-wrapper">
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept="image/jpeg,image/png,image/webp,image/jpg"
+                            required
+                        >
+                        <div id="imagePreview" class="image-preview">
+                            <p>Selecciona una imagen</p>
+                        </div>
+                    </div>
+                    <small>Formatos aceptados: JPG, PNG, WEBP. Tamaño máximo: 5MB</small>
+                </div>
+
+                <!-- Botones -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        Subir Foto
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        Limpiar
+                    </button>
+                </div>
+
+                <!-- Estado de carga -->
+                <div id="uploadProgress" class="upload-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">Subiendo...</p>
+                </div>
+
+                <!-- Mensajes -->
+                <div id="successMessage" class="success-message" style="display: none;">
+                    ✅ ¡Foto subida exitosamente!
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    ❌ <span id="errorText">Error al subir la foto</span>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Galería de Fotos con Supabase &copy; 2025</p>
+        </div>
+    </footer>
+
+    <script src="js/upload.js" type="module"></script>
+</body>
+</html>

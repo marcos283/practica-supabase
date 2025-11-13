@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fotos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>📸 Galería de Fotos</h1>
+            <a href="upload.html" class="btn btn-primary">Subir Foto</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Filtros por tags -->
+        <section class="filters">
+            <h2>Filtrar por tags:</h2>
+            <div id="tagFilters" class="tag-filters">
+                <button class="tag-btn active" data-tag="all">Todas</button>
+            </div>
+        </section>
+
+        <!-- Estado de carga -->
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p>Cargando fotos...</p>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div id="errorState" class="error-message" style="display: none;">
+            <p>❌ Error al cargar las fotos. Por favor, intenta de nuevo.</p>
+        </div>
+
+        <!-- Grid de fotos -->
+        <section id="photoGrid" class="photo-grid">
+            <!-- Las fotos se cargarán aquí dinámicamente -->
+        </section>
+
+        <!-- Mensaje cuando no hay fotos -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <p>No hay fotos para mostrar.</p>
+            <a href="upload.html" class="btn btn-primary">Sube la primera foto</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Galería de Fotos con Supabase &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- Modal para ver foto en grande -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="" alt="">
+            <div class="modal-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDescription"></p>
+                <div id="modalTags" class="tags"></div>
+                <p class="modal-date" id="modalDate"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/gallery.js" type="module"></script>
+</body>
+</html>
