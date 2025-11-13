@@ -4,10 +4,6 @@
   publish = "."
   command = "npm run build"
 
-# Inyectar variables de entorno en el HTML
-[[plugins]]
-  package = "@netlify/plugin-env-var-injector"
-
 # Headers de seguridad
 [[headers]]
   for = "/*"
