@@ -28,11 +28,12 @@ const errorMessage = document.getElementById('errorMessage');
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar si ya hay sesión activa
-    checkSession();
-
-    // Configurar event listeners
-    setupEventListeners();
+    // Verificar si ya hay sesión activa (solo en login.html)
+    if (loginForm && registerForm) {
+        checkSession();
+        // Configurar event listeners solo si estamos en login.html
+        setupEventListeners();
+    }
 });
 
 // ========================================
@@ -102,6 +103,9 @@ function getAccessToken() {
  * Configura todos los event listeners
  */
 function setupEventListeners() {
+    // Solo configurar si los elementos existen
+    if (!loginForm || !registerForm) return;
+
     // Tabs de login/registro
     authTabs.forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
@@ -353,6 +357,7 @@ function getCurrentUser() {
  * Muestra un mensaje de éxito
  */
 function showSuccess(message) {
+    if (!successMessage || !errorMessage) return;
     successMessage.textContent = message;
     successMessage.classList.add('show');
     errorMessage.classList.remove('show');
@@ -362,6 +367,7 @@ function showSuccess(message) {
  * Muestra un mensaje de error
  */
 function showError(message) {
+    if (!errorMessage || !successMessage) return;
     errorMessage.textContent = message;
     errorMessage.classList.add('show');
     successMessage.classList.remove('show');
@@ -371,6 +377,7 @@ function showError(message) {
  * Oculta todos los mensajes
  */
 function hideMessages() {
+    if (!successMessage || !errorMessage) return;
     successMessage.classList.remove('show');
     errorMessage.classList.remove('show');
 }
