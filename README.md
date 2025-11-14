@@ -5,11 +5,12 @@ Galería de fotos moderna y responsive construida con HTML, CSS y JavaScript van
 ## ✨ Características
 
 - **Galería responsive** con CSS Grid (mobile-first)
-- **Subida de imágenes** a Supabase Storage
+- **Autenticación de usuarios** con Email + Contraseña
+- **Subida de imágenes** a Supabase Storage (solo usuarios autenticados)
 - **Filtrado por tags** dinámico
 - **Modal** para ver fotos en detalle
 - **Lazy loading** de imágenes
-- **Sin autenticación** (público)
+- **Galería pública** (todos pueden ver, solo usuarios autenticados suben)
 - **Código limpio** y comentado en español
 
 ## 🛠️ Tecnologías
@@ -23,16 +24,18 @@ Galería de fotos moderna y responsive construida con HTML, CSS y JavaScript van
 ```
 practica-supabase-netlify/
 ├── index.html              # Página principal de la galería
-├── upload.html             # Página de subida de fotos
+├── upload.html             # Página de subida de fotos (protegida)
+├── login.html              # Página de login/registro
 ├── css/
-│   └── style.css          # Estilos responsive
+│   └── style.css          # Estilos responsive + auth
 ├── js/
 │   ├── gallery.js         # Lógica de la galería
-│   └── upload.js          # Lógica de subida
+│   ├── upload.js          # Lógica de subida
+│   └── auth.js            # Lógica de autenticación
 ├── build.js               # Script de build para Netlify
 ├── package.json           # Configuración de npm
 ├── netlify.toml           # Configuración de Netlify
-├── supabase-setup.sql     # SQL para configurar Supabase
+├── supabase-setup.sql     # SQL para configurar Supabase + Auth
 ├── .env.example           # Ejemplo de variables de entorno
 └── README.md              # Este archivo
 ```
@@ -73,9 +76,44 @@ practica-supabase-netlify/
    - Allowed operations: `SELECT`
 
    **Política para subida:**
-   - Name: `Permitir subida pública`
-   - Policy definition: `true`
+   - Name: `Permitir subida a usuarios autenticados`
+   - Policy definition: `(bucket_id = 'photos'::text)`
+   - Target roles: `authenticated`
    - Allowed operations: `INSERT`
+
+### 4. Configurar Autenticación
+
+1. Ve a **Authentication** en el panel de Supabase
+2. Configura **Email Auth**:
+   - Ve a **Authentication > Providers > Email**
+   - Activa **Enable Email provider**
+   - **Confirm email**: Desactiva para desarrollo (o activa para producción)
+   - **Secure email change**: Activado (recomendado)
+3. Configura **Site URL y Redirect URLs**:
+   - Ve a **Authentication > URL Configuration**
+   - **Site URL**: Tu URL de Netlify (ej: `https://tu-sitio.netlify.app`)
+   - **Redirect URLs**: Agrega:
+     - Tu URL de Netlify
+     - `http://localhost:8000` (para desarrollo local)
+
+### 5. Actualizar Políticas (Si ya tenías la tabla creada)
+
+Si ya tenías la tabla `gallery_photos` sin autenticación, ejecuta estos comandos en el SQL Editor:
+
+```sql
+-- Agregar columna user_id
+ALTER TABLE public.gallery_photos
+    ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Eliminar política antigua
+DROP POLICY IF EXISTS "Permitir inserción pública de fotos" ON public.gallery_photos;
+
+-- Crear nueva política
+CREATE POLICY "Permitir inserción a usuarios autenticados"
+    ON public.gallery_photos
+    FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+```
 
 ## 🌐 Deploy en Netlify
 
@@ -171,22 +209,45 @@ Abre `http://localhost:8000` en tu navegador.
 
 ## 📝 Uso
 
+### Crear una Cuenta
+
+1. Haz clic en "Iniciar Sesión" en la página principal
+2. Ve a la pestaña "Registrarse"
+3. Ingresa tu email y contraseña (mínimo 6 caracteres)
+4. Confirma tu contraseña
+5. Haz clic en "Crear Cuenta"
+6. **Nota**: Si tienes confirmación por email activada, revisa tu correo
+
+### Iniciar Sesión
+
+1. Haz clic en "Iniciar Sesión"
+2. Ingresa tu email y contraseña
+3. Haz clic en "Iniciar Sesión"
+4. Serás redirigido a la galería automáticamente
+
 ### Subir una Foto
 
-1. Ve a la página de upload (botón "Subir Foto")
-2. Completa el formulario:
+1. **Debes estar autenticado** para subir fotos
+2. Haz clic en "Subir Foto" en el header
+3. Completa el formulario:
    - **Título** (obligatorio)
    - **Descripción** (opcional)
    - **Tags** (opcional, separados por comas)
    - **Imagen** (JPG, PNG, WEBP, máx 5MB)
-3. Haz clic en "Subir Foto"
-4. Espera la confirmación y vuelve a la galería
+4. Haz clic en "Subir Foto"
+5. Espera la confirmación y vuelve a la galería
 
 ### Ver Fotos
 
 1. La página principal muestra todas las fotos en un grid responsive
-2. Haz clic en cualquier foto para verla en detalle
-3. Usa los filtros de tags para filtrar por categoría
+2. **No necesitas estar autenticado** para ver las fotos
+3. Haz clic en cualquier foto para verla en detalle
+4. Usa los filtros de tags para filtrar por categoría
+
+### Cerrar Sesión
+
+1. Haz clic en "Cerrar Sesión" en el header
+2. Serás redirigido a la página de login
 
 ## 🔧 Personalización
 
@@ -210,13 +271,22 @@ Edita en `js/upload.js`:
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 ```
 
-### Añadir Autenticación
+### Modificar Comportamiento de Autenticación
 
-Actualmente la app es pública. Para añadir autenticación:
+La aplicación está configurada para:
+- **Galería pública**: Todos pueden ver las fotos
+- **Subida protegida**: Solo usuarios autenticados pueden subir
 
-1. Implementa Supabase Auth en el frontend
-2. Modifica las políticas RLS en Supabase
-3. Añade checks de autenticación en `gallery.js` y `upload.js`
+Para cambiar a galería privada (solo usuarios autenticados pueden ver):
+1. Modifica la política RLS en Supabase:
+   ```sql
+   DROP POLICY IF EXISTS "Permitir lectura pública de fotos" ON public.gallery_photos;
+   CREATE POLICY "Permitir lectura a usuarios autenticados"
+       ON public.gallery_photos
+       FOR SELECT
+       USING (auth.uid() IS NOT NULL);
+   ```
+2. Agrega verificación de autenticación en `index.html` (similar a `upload.html`)
 
 ## 🐛 Solución de Problemas
 
@@ -238,12 +308,33 @@ Actualmente la app es pública. Para añadir autenticación:
 - Asegúrate de que el bucket sea público
 - Revisa los CORS en Supabase (deberían estar configurados por defecto)
 
+### No puedo registrarme o iniciar sesión
+
+- Verifica que Email Auth esté activado en Supabase (Authentication > Providers > Email)
+- Revisa la consola del navegador para ver errores específicos
+- Si la confirmación por email está activa, revisa tu correo
+- Verifica que las credenciales de Supabase estén correctamente configuradas
+
+### Error al subir fotos después de agregar autenticación
+
+- Asegúrate de estar autenticado antes de intentar subir
+- Verifica que la política del bucket permita INSERT a usuarios autenticados
+- Verifica que la tabla tenga el campo `user_id` y la política RLS correcta
+- Revisa la consola del navegador para errores específicos
+
+### La sesión no persiste al recargar la página
+
+- Verifica que el localStorage no esté bloqueado en tu navegador
+- Asegúrate de que las cookies estén habilitadas
+- Revisa que no haya errores en la consola relacionados con el token
+
 ## 📚 Recursos
 
 - [Documentación de Supabase](https://supabase.com/docs)
-- [Documentación de Netlify](https://docs.netlify.com)
+- [Supabase Auth](https://supabase.com/docs/guides/auth)
 - [Supabase Storage](https://supabase.com/docs/guides/storage)
 - [Supabase Database](https://supabase.com/docs/guides/database)
+- [Documentación de Netlify](https://docs.netlify.com)
 
 ## 📄 Licencia
 

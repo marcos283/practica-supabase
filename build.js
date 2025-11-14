@@ -21,7 +21,7 @@ const envScript = `
 `;
 
 // Archivos HTML a procesar
-const htmlFiles = ['index.html', 'upload.html'];
+const htmlFiles = ['index.html', 'upload.html', 'login.html'];
 
 htmlFiles.forEach(file => {
   const filePath = path.join(__dirname, file);

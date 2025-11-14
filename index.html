@@ -10,7 +10,18 @@
     <header class="header">
         <div class="container">
             <h1>📸 Galería de Fotos</h1>
-            <a href="upload.html" class="btn btn-primary">Subir Foto</a>
+            <div class="header-actions">
+                <!-- Mostrar si el usuario está autenticado -->
+                <div id="authenticatedActions" style="display: none;">
+                    <span id="userEmailDisplay" class="user-email"></span>
+                    <a href="upload.html" class="btn btn-primary">Subir Foto</a>
+                    <button onclick="window.supabaseAuth.logout()" class="btn btn-secondary">Cerrar Sesión</button>
+                </div>
+                <!-- Mostrar si el usuario NO está autenticado -->
+                <div id="guestActions" style="display: none;">
+                    <a href="login.html" class="btn btn-primary">Iniciar Sesión</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -65,6 +76,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Auth debe cargarse primero -->
+    <script src="js/auth.js"></script>
+
+    <!-- Verificar autenticación y actualizar UI -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const authenticatedActions = document.getElementById('authenticatedActions');
+            const guestActions = document.getElementById('guestActions');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+
+            if (window.supabaseAuth && window.supabaseAuth.isAuthenticated()) {
+                // Usuario autenticado
+                const user = window.supabaseAuth.getCurrentUser();
+                if (user) {
+                    userEmailDisplay.textContent = user.email;
+                    authenticatedActions.style.display = 'flex';
+                }
+            } else {
+                // Usuario no autenticado
+                guestActions.style.display = 'flex';
+            }
+        });
+    </script>
 
     <script src="js/gallery.js" type="module"></script>
 </body>

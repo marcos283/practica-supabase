@@ -159,12 +159,15 @@ async function uploadImageToStorage(file) {
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = fileName;
 
+    // Obtener el token de autenticación
+    const token = window.supabaseAuth ? window.supabaseAuth.getAccessToken() : SUPABASE_ANON_KEY;
+
     // Realizar la subida usando la API REST de Supabase Storage
     const response = await fetch(`${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${filePath}`, {
         method: 'POST',
         headers: {
             'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': file.type
         },
         body: file
@@ -195,12 +198,17 @@ async function savePhotoMetadata(imageUrl) {
         ? tagsRaw.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
         : [];
 
+    // Obtener el usuario actual
+    const user = window.supabaseAuth ? window.supabaseAuth.getCurrentUser() : null;
+    const token = window.supabaseAuth ? window.supabaseAuth.getAccessToken() : SUPABASE_ANON_KEY;
+
     // Crear objeto de datos
     const photoData = {
         title,
         description: description || null,
         image_url: imageUrl,
         tags,
+        user_id: user ? user.id : null,
         created_at: new Date().toISOString()
     };
 
@@ -209,7 +217,7 @@ async function savePhotoMetadata(imageUrl) {
         method: 'POST',
         headers: {
             'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal'
         },

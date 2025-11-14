@@ -9,7 +9,13 @@
 <body>
     <header class="header">
         <div class="container">
-            <h1>📤 Subir Foto</h1>
+            <div class="header-content">
+                <h1>📤 Subir Foto</h1>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <span id="userEmail"></span>
+                    <button onclick="window.supabaseAuth.logout()" class="btn btn-secondary btn-sm">Cerrar Sesión</button>
+                </div>
+            </div>
             <a href="index.html" class="btn btn-secondary">Volver a Galería</a>
         </div>
     </header>
@@ -107,6 +113,27 @@
             <p>Galería de Fotos con Supabase &copy; 2025</p>
         </div>
     </footer>
+
+    <!-- Auth debe cargarse primero -->
+    <script src="js/auth.js"></script>
+
+    <!-- Verificación de autenticación -->
+    <script>
+        // Verificar autenticación antes de cargar la página
+        if (!window.supabaseAuth || !window.supabaseAuth.isAuthenticated()) {
+            // Redirigir al login si no está autenticado
+            window.location.href = 'login.html';
+        } else {
+            // Mostrar información del usuario
+            const user = window.supabaseAuth.getCurrentUser();
+            if (user) {
+                const userInfo = document.getElementById('userInfo');
+                const userEmail = document.getElementById('userEmail');
+                userEmail.textContent = user.email;
+                userInfo.style.display = 'flex';
+            }
+        }
+    </script>
 
     <script src="js/upload.js" type="module"></script>
 </body>

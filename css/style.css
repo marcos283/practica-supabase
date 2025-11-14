@@ -542,6 +542,52 @@ main {
 }
 
 /* ========================================
+   AUTH - Elementos de autenticación
+   ======================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.user-email {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bg-color);
+    border-radius: var(--radius-sm);
+}
+
+#authenticatedActions,
+#guestActions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* ========================================
    RESPONSIVE - Ajustes adicionales
    ======================================== */
 
@@ -556,5 +602,22 @@ main {
 
     main {
         padding: var(--spacing-xl) 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    #authenticatedActions,
+    #guestActions {
+        width: 100%;
     }
 }
