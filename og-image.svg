@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo con gradiente -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Patrón de fondo decorativo -->
+  <g opacity="0.1">
+    <circle cx="100" cy="100" r="60" fill="white"/>
+    <circle cx="1100" cy="530" r="80" fill="white"/>
+    <circle cx="900" cy="100" r="50" fill="white"/>
+    <circle cx="200" cy="500" r="70" fill="white"/>
+  </g>
+
+  <!-- Icono de cámara grande -->
+  <g transform="translate(150, 180)">
+    <g fill="white" opacity="0.95">
+      <!-- Cuerpo de la cámara -->
+      <rect x="0" y="40" width="200" height="140" rx="15"/>
+
+      <!-- Visor superior -->
+      <rect x="60" y="10" width="80" height="40" rx="10"/>
+
+      <!-- Lente principal -->
+      <circle cx="100" cy="110" r="50" fill="#667eea"/>
+      <circle cx="100" cy="110" r="35" fill="white" opacity="0.4"/>
+      <circle cx="100" cy="110" r="20" fill="#764ba2"/>
+
+      <!-- Flash -->
+      <circle cx="160" cy="70" r="12" fill="#FFF59D"/>
+
+      <!-- Botón -->
+      <rect x="170" y="50" width="15" height="15" rx="3" fill="#667eea"/>
+    </g>
+  </g>
+
+  <!-- Texto principal -->
+  <text x="450" y="240" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">
+    Galería de Fotos
+  </text>
+
+  <!-- Subtítulo -->
+  <text x="450" y="310" font-family="Arial, sans-serif" font-size="36" fill="white" opacity="0.9">
+    Comparte tus mejores momentos
+  </text>
+
+  <!-- Características -->
+  <g font-family="Arial, sans-serif" font-size="28" fill="white" opacity="0.85">
+    <text x="450" y="380">📸 Sube y organiza tus fotos</text>
+    <text x="450" y="430">🏷️  Etiquetas y filtros</text>
+    <text x="450" y="480">🔐 Autenticación segura</text>
+  </g>
+
+  <!-- Powered by -->
+  <text x="450" y="560" font-family="Arial, sans-serif" font-size="20" fill="white" opacity="0.7">
+    Powered by Supabase + Netlify
+  </text>
+</svg>

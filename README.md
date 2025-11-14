@@ -132,6 +132,7 @@ CREATE POLICY "Permitir inserción a usuarios autenticados"
      - `SUPABASE_URL`: tu URL de Supabase
      - `SUPABASE_ANON_KEY`: tu anon key de Supabase
 7. Haz clic en **Deploy site**
+8. **Importante**: Una vez desplegado, actualiza las URLs de Open Graph (ver sección abajo)
 
 ### Opción 2: Deploy con Netlify CLI
 
@@ -152,6 +153,29 @@ netlify env:set SUPABASE_ANON_KEY "tu-anon-key-aqui"
 # Deploy
 netlify deploy --prod
 ```
+
+### 🔗 Configurar URLs de Open Graph (Importante)
+
+Después del primer deploy, **debes actualizar las URLs** en los meta tags para que funcione correctamente el preview al compartir en WhatsApp, Facebook, Twitter, etc.
+
+1. **Obtén tu URL de Netlify** (ej: `https://mi-galeria.netlify.app`)
+2. **Busca y reemplaza** en todos los archivos HTML (`index.html`, `upload.html`, `login.html`):
+   - Buscar: `https://tu-sitio.netlify.app`
+   - Reemplazar por: `https://tu-url-real.netlify.app`
+
+3. **Archivos a editar**:
+   ```bash
+   index.html   # Líneas 17, 20, 24, 27
+   upload.html  # Líneas 17, 20, 24, 27
+   login.html   # Líneas 17, 20, 24, 27
+   ```
+
+4. **Hacer commit y push** de los cambios
+5. **Probar el preview**:
+   - Usa [https://www.opengraph.xyz/](https://www.opengraph.xyz/)
+   - O comparte el link en WhatsApp/Telegram y verás el preview
+
+**Tip**: Puedes usar buscar/reemplazar en tu editor para cambiar todas las ocurrencias de una vez.
 
 ## 💻 Desarrollo Local
 
